@@ -8,5 +8,7 @@ class Verbas extends Model
 {
     //
     protected $table = 'Verbas';
-    protected $fillable = ['codDeputado','codTipoDespesa','codMes','valor','descTipoDespesa'];
+    protected $fillable = ['codDespesa','descVerba'];
+    protected $primaryKey = 'codDespesa';
+    
 }

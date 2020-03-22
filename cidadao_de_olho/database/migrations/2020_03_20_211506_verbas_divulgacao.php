@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Deputado extends Migration
+class VerbasDivulgacao extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,16 @@ class Deputado extends Migration
      */
     public function up()
     {
-        Schema::create('Deputado', function (Blueprint $table) {
-            $table->bigInteger('idDeputado');
-            $table->string('partido');
-            $table->string('nome');
+        //
+        Schema::create('VerbasDivulgacao', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('codDespesa');
+            $table->bigInteger('idEmpresa');
+            $table->integer('mes');
+
+            
             $table->timestamps();
+
         });
     }
 
@@ -28,6 +33,6 @@ class Deputado extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Deputado');
+        //
     }
 }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Deputado;
 use App\Verbas;
+use App\DeputadoVerbas;
+use App\DivulgacaoParlamentar;
+use App\VerbasDivulgacao;
 
 class ConsumirApiController extends Controller
 {
@@ -24,7 +27,7 @@ class ConsumirApiController extends Controller
             foreach($deputados as $deputado)//iterar na lista de deputados
             {
                 $dt = [
-                'id' => $deputado->id,
+                'idDeputado' => $deputado->id,
                 'partido' => $deputado->partido,
                 'nome' => $deputado->nome
                 ];
@@ -36,8 +39,7 @@ class ConsumirApiController extends Controller
     }
 
      public function verbas_idenizatorias($list_id)
-    {
-        
+    {     
         foreach($list_id as $id){
             for($mes = 1; $mes <=12; $mes++)
             {
@@ -45,16 +47,52 @@ class ConsumirApiController extends Controller
 
                 $data = json_decode(file_get_contents($data));     
 
-                foreach ($data->list as $despesa) {
+                foreach ($data->list as $despesa) 
+                {
+                    
+                    #testa se o codTipoDespesa ja foi cadastrado
+                    if(Verbas::where('codDespesa', $despesa->codTipoDespesa)->count() == 0){
+                        $dt = [
+                        'codDespesa' => $despesa->codTipoDespesa,
+                        'descVerba' => $despesa->descTipoDespesa
+                        ];
+                        Verbas::create($dt);
+
+                    }
+                    #alimentando relacionamento n-n de deputados e verbas
                     $dt = [
-                    'codDeputado' => $despesa->idDeputado,
-                    'codTipoDespesa' => $despesa->codTipoDespesa,
-                    'codMes' => $mes,
-                    'valor' => $despesa->valor,
-                    'descTipoDespesa' => $despesa->descTipoDespesa
+                        'codDespesa' => $despesa->codTipoDespesa,
+                        'idDeputado' => $despesa->idDeputado,
+                        'valor' => $despesa->valor,
+                        'mes' => $mes
                     ];
-                    Verbas::create($dt);
-        
+                    DeputadoVerbas::create($dt);
+
+                    //Caso a verba for do tipo para divulgacao parlamentar ha a necessidade de percorrer o 'listaDetalheVerba' para alimentar o banco com as empresas que prestam esse tipo de despesa
+                    if($despesa->codTipoDespesa == 36)
+                    {
+
+                        foreach ($despesa->listaDetalheVerba as $divulgacaoParlamentar) 
+                        {
+                            #testa se o cpfCnpj ja foi cadastrado
+                            if(DivulgacaoParlamentar::where('cnpj', $divulgacaoParlamentar->cpfCnpj)->count()  == 0)
+                            {
+                                $dt = [
+                                'cnpj' => $divulgacaoParlamentar->cpfCnpj,
+                                'nomeEmpresa' =>  $divulgacaoParlamentar->nomeEmitente
+                                ];
+                                DivulgacaoParlamentar::create($dt);
+                            }
+                            #alimentando relacionamento n-n de verbas par divulgacao e empresas 
+                            $dt = [
+                            'codDespesa' => 36,
+                            'idEmpresa' =>  $divulgacaoParlamentar->cpfCnpj,
+                            'mes' => $mes
+                            ];
+                            VerbasDivulgacao::create($dt);
+                        }
+                    }
+
                 }
             }
       
