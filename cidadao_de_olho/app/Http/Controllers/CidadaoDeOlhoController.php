@@ -12,13 +12,26 @@ class CidadaoDeOlhoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function top5_gasto_anual()
     {
   
-        $top5 = DB::select("SELECT Deputado.idDeputado, SUM(DeputadoVerbas.valor) AS gasto_anual FROM Deputado, DeputadoVerbas WHERE Deputado.idDeputado = DeputadoVerbas.idDeputado  GROUP BY Deputado.idDeputado ORDER BY  gasto_anual DESC LIMIT 5;");
+        $top5 = DB::select("SELECT Deputado.nome, SUM(DeputadoVerbas.valor) AS gasto_anual FROM Deputado, DeputadoVerbas WHERE Deputado.idDeputado = DeputadoVerbas.idDeputado  GROUP BY Deputado.nome ORDER BY  gasto_anual DESC LIMIT 5;");
         
-       return response()->json(json_encode(Deputado::hydrate($top5)));
+       return response()->json(Deputado::hydrate($top5));
 
+    }
+    public function top5_solicitantes_mes(Request $request)
+    {
+        if($request->mes > 0 and  $request->mes < 13)
+        {
+            $top5 = DB::select("SELECT Deputado.nome, count(DeputadoVerbas.idDeputado) AS quantidade FROM Deputado, DeputadoVerbas WHERE Deputado.idDeputado = DeputadoVerbas.idDeputado and DeputadoVerbas.mes=".$request->mes." GROUP BY Deputado.nome ORDER BY  quantidade DESC LIMIT 5;");
+        }
+       return response()->json(Deputado::hydrate($top5));
+
+    }
+    public function redes()
+    {
+  
     }
 
     /**
