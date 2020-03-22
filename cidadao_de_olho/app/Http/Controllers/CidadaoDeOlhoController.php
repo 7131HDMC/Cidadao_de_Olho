@@ -8,7 +8,7 @@ use App\Deputado;
 class CidadaoDeOlhoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     *  Funcao retorna um arquivo json com os 5 deputados que mais gastaram durante o ano de 2019(os dados que alimentam o banco sao deste)
      *
      * @return \Illuminate\Http\Response
      */
@@ -20,6 +20,12 @@ class CidadaoDeOlhoController extends Controller
        return response()->json(Deputado::hydrate($top5));
 
     }
+
+     /**
+     *  Funcao retorna um arquivo json com os 5 deputados que mais pediram verbas idenizatoria durante o mes informado pelo  parametro 'mes'     
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function top5_solicitantes_mes(Request $request)
     {
         if($request->mes > 0 and  $request->mes < 13)
@@ -29,6 +35,7 @@ class CidadaoDeOlhoController extends Controller
        return response()->json(Deputado::hydrate($top5));
 
     }
+    
     public function redes()
     {
   
