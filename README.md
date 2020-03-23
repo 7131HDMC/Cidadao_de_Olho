@@ -8,8 +8,9 @@ Para rodar a API Cidadão de Olho funciona em servidor com apache, mysql, php, c
 Para consumir a Webservices da ALMG, a rota nescessaria para isso e '/bd_deputados'( http://localhost/bd_deputados).
 
 
-###Rercursos disponibilizados pela aplicacao:
-####1 - Mostrar os top 5 deputados que mais pediram reembolso de verbas indenizatórias por mês. 
+### Rercursos disponibilizados pela aplicacao:
+
+1 - Mostrar os top 5 deputados que mais pediram reembolso de verbas indenizatórias por mês. 
 Para acessar esse recurso basta adicionar a rota '/cidadao_de_olho' e o parametro 'mes' com o mes que voce planeja analisar, que a aplicacao retornara em formato json os dados dos 5 deputados que mais pediram verbas neste mes, caso queira pegar durante o ano todo adicione a rota '/cidadao_de_olho?mes=all'.
 
 Exemplo para um mes especifico:
@@ -19,13 +20,14 @@ Exemplo para o ano:
 http://localhost/cidadao_de_olho?mes=all
 
  Nota: Ha a rota '/cidadao_de_olho' sem parametro disponivel, ela foi uma interpetracao equivocada que obtive do problema que gera um json com os top 5 deputados que mais gastaram no ano, mas como achei interessante nao a apaguei.
-####2 - Mostrar o ranking das redes sociais mais utilizadas dentre os deputados.
+ 
+2 - Mostrar o ranking das redes sociais mais utilizadas dentre os deputados.
 Para acessar esse recurso basta adcionar a rota '/cidadao_de_olho/redes'.
 
 Exemplo:
 http://localhost/cidadao_de_olho/redes
 
-###Nota sobre a WebService: Ao consumir a ws eu achei indicio de redes socias somente nas verbas para divulgacao que os deputados usam, porem nem todas as empresas que sao contradas sao redes sociais e neste ponto eu me perguntei se estava consumindo os dados corretos para este websevice
+### Nota sobre a WebService: Ao consumir a ws eu achei indicio de redes socias somente nas verbas para divulgacao que os deputados usam, porem nem todas as empresas que sao contradas sao redes sociais e neste ponto eu me perguntei se estava consumindo os dados corretos para este websevice
 
 
 
