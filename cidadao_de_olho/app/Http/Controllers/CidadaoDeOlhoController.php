@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Deputado;
+use App\DivulgacaoParlamentar;
 class CidadaoDeOlhoController extends Controller
 {
     /**
@@ -17,7 +18,7 @@ class CidadaoDeOlhoController extends Controller
   
         $top5 = DB::select("SELECT Deputado.nome, SUM(DeputadoVerbas.valor) AS gasto_anual FROM Deputado, DeputadoVerbas WHERE Deputado.idDeputado = DeputadoVerbas.idDeputado  GROUP BY Deputado.nome ORDER BY  gasto_anual DESC LIMIT 5;");
         
-       return response()->json(Deputado::hydrate($top5));
+       return response()->json(Deputado::hydrate($top5));//funcao hydrate converte o sql para objeto Eloquent
 
     }
 
@@ -31,14 +32,24 @@ class CidadaoDeOlhoController extends Controller
         if($request->mes > 0 and  $request->mes < 13)
         {
             $top5 = DB::select("SELECT Deputado.nome, count(DeputadoVerbas.idDeputado) AS quantidade FROM Deputado, DeputadoVerbas WHERE Deputado.idDeputado = DeputadoVerbas.idDeputado and DeputadoVerbas.mes=".$request->mes." GROUP BY Deputado.nome ORDER BY  quantidade DESC LIMIT 5;");
+        }else if($request->mes='all'){
+            $top5 = DB::select("SELECT Deputado.nome, count(DeputadoVerbas.idDeputado) AS quantidade FROM Deputado, DeputadoVerbas WHERE Deputado.idDeputado = DeputadoVerbas.idDeputado  GROUP BY Deputado.nome ORDER BY  quantidade DESC LIMIT 5;");
         }
        return response()->json(Deputado::hydrate($top5));
 
     }
     
+     /**
+     *  Funcao retorna um arquivo json com os meios de divulgacao masi usado pelos deputados    
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function redes()
     {
-  
+        $top5 = DB::select("SELECT nomeEmpresa, COUNT(VerbasDivulgacao.idEmpresa) uso_para_divulgar FROM EmpresaDivulgacao, VerbasDivulgacao WHERE VerbasDivulgacao.idEmpresa=EmpresaDivulgacao.cnpj and EmpresaDivulgacao.nomeEmpresa LIKE '%online%' GROUP BY nomeEmpresa ORDER BY  uso_para_divulgar DESC LIMIT 5 ;");
+
+        return response()->json(DivulgacaoParlamentar::hydrate($top5));
+
     }
 
     /**

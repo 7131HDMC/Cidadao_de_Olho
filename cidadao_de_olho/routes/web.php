@@ -16,4 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/bd_deputados','ConsumirApiController@index');
 Route::get('/cidadao_de_olho','CidadaoDeOlhoController@top5_gasto_anual');
 Route::get('/cidadao_de_olho','CidadaoDeOlhoController@top5_solicitantes_mes');
+Route::get('/cidadao_de_olho/redes','CidadaoDeOlhoController@redes');
+
 
