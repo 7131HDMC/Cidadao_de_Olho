@@ -14,7 +14,7 @@ class Deputado extends Migration
     public function up()
     {
         Schema::create('Deputado', function (Blueprint $table) {
-            $table->bigInteger('idDeputado');
+            $table->bigInteger('idDeputado')->unique();
             $table->string('partido');
             $table->string('nome');
             $table->timestamps();

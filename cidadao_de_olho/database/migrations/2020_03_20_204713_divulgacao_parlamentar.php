@@ -15,7 +15,7 @@ class DivulgacaoParlamentar extends Migration
     {
         //
          Schema::create('EmpresaDivulgacao', function (Blueprint $table) {
-            $table->bigInteger('cnpj');
+            $table->bigInteger('cnpj')->unique();
             $table->string('nomeEmpresa');
             $table->timestamps();
 

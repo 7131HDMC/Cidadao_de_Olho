@@ -15,7 +15,7 @@ class Verbas extends Migration
     {
         //
         Schema::create('Verbas', function (Blueprint $table) {
-            $table->bigInteger('codDespesa');
+            $table->bigInteger('codDespesa')->unique();
             $table->string('descVerba');
             $table->timestamps();
 

@@ -15,10 +15,10 @@ class CidadaoDeOlhoController extends Controller
      */
     public function top5_gasto_anual()
     {
-  
-        $top5 = DB::select("SELECT Deputado.nome, SUM(DeputadoVerbas.valor) AS gasto_anual FROM Deputado, DeputadoVerbas WHERE Deputado.idDeputado = DeputadoVerbas.idDeputado  GROUP BY Deputado.nome ORDER BY  gasto_anual DESC LIMIT 5;");
+        $Deputado = new Deputado();
+        $deputados = $Deputado->getTopDeputadosAnual();
         
-       return response()->json(Deputado::hydrate($top5));//funcao hydrate converte o sql para objeto Eloquent
+       return response()->json($deputados);
 
     }
 
@@ -27,15 +27,16 @@ class CidadaoDeOlhoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function top5_solicitantes_mes(Request $request)
+    public function top5_solicitantes_mes($month)
     {
-        if($request->mes > 0 and  $request->mes < 13)
-        {
-            $top5 = DB::select("SELECT Deputado.nome, count(DeputadoVerbas.idDeputado) AS quantidade FROM Deputado, DeputadoVerbas WHERE Deputado.idDeputado = DeputadoVerbas.idDeputado and DeputadoVerbas.mes=".$request->mes." GROUP BY Deputado.nome ORDER BY  quantidade DESC LIMIT 5;");
-        }else if($request->mes='all'){
-            $top5 = DB::select("SELECT Deputado.nome, count(DeputadoVerbas.idDeputado) AS quantidade FROM Deputado, DeputadoVerbas WHERE Deputado.idDeputado = DeputadoVerbas.idDeputado  GROUP BY Deputado.nome ORDER BY  quantidade DESC LIMIT 5;");
+        $Deputado = new Deputado();
+        if($month > 0 and  $month < 13){
+            $deputados = $Deputado->getByMonth($month);
+        }else if($month == 'all'){
+            $deputados = $Deputado->getAll();
         }
-       return response()->json(Deputado::hydrate($top5));
+
+       return response()->json($deputados);
 
     }
     
@@ -46,9 +47,9 @@ class CidadaoDeOlhoController extends Controller
      */
     public function redes()
     {
-        $top5 = DB::select("SELECT nomeEmpresa, COUNT(VerbasDivulgacao.idEmpresa) uso_para_divulgar FROM EmpresaDivulgacao, VerbasDivulgacao WHERE VerbasDivulgacao.idEmpresa=EmpresaDivulgacao.cnpj and EmpresaDivulgacao.nomeEmpresa LIKE '%online%' GROUP BY nomeEmpresa ORDER BY  uso_para_divulgar DESC LIMIT 5 ;");
-
-        return response()->json(DivulgacaoParlamentar::hydrate($top5));
+        $Empresas = new DivulgacaoParlamentar();
+        $redes = $Empresas->getRedes();
+        return response()->json($redes);
 
     }
 
