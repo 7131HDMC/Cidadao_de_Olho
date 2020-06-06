@@ -10,7 +10,7 @@ Para consumir a Webservices da ALMG e popular o banco ultilize o comando 'php ar
 ### Recursos disponibilizados pela aplicação:
 
 1 - Mostrar os tops 5 deputados que mais pediram reembolso de verbas indenizatórias por mês.
-Para acessar esse recurso basta adicionar a rota '/cidadao_de_olho/{mes}' com mês que você planeja analisar, então a aplicação retornará em formato json os dados dos 5 deputados que mais pediram verbas neste mês. 
+Para acessar esse recurso basta adicionar a rota '/cidadao_de_olho/solicitantes/{mes}' com mês que você planeja analisar, então a aplicação retornará em formato json os dados dos 5 deputados que mais pediram verbas neste mês. 
 Para pegar os 5 deputados que mais pediram verbas durante o ano todo adicione o valor 'all' como parâmetro.
 
 Exemplo para um mês especifico:
